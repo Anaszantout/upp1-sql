@@ -1,4 +1,4 @@
-
+import actiontypes from '../../store/actiontypes'
 
 const initState = {
     loading: false,
@@ -9,13 +9,13 @@ const initState = {
 const IssuesReducer = (state = initState, action) => {
     switch(action.type) {
 
-        case actiontypes().Issues.getIssues:
+        case actiontypes().issues.getIssues:
             return {
                 ...state,
                 loading: true
             }
 
-        case actiontypes().Issues.getIssuesSuccess:
+        case actiontypes().issues.getIssuesSuccess:
             return {
                 ...state,
                 loading: false,
@@ -23,7 +23,7 @@ const IssuesReducer = (state = initState, action) => {
                 data: action.payload
             }
 
-        case actiontypes().products.getIssuesFailure:
+        case actiontypes().issues.getIssuesFailure:
             return {
                 ...state,
                 loading: false,

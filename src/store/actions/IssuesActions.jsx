@@ -1,4 +1,4 @@
-import actiontypes from '../actiontypes'
+import actiontypes from '../../store/actiontypes'
 import axios from 'axios'
 
 export const getIssues = () => {

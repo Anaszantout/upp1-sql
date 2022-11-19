@@ -19,7 +19,7 @@ const Navbar = () => {
       <ul className="navbar-nav mr-auto ">
         <li><NavLink to="/" end className='nav-link'>Home</NavLink></li>
         <li><NavLink to="/NewTodo" end className='nav-link'>Add New Todo</NavLink></li>
-        <li><NavLink to="/Register" end className='nav-link'>Register</NavLink></li>
+        <li><NavLink to="/Customer" end className='nav-link'>Customer</NavLink></li>
        
         
       </ul>

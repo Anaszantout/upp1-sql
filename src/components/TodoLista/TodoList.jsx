@@ -1,6 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const TodoList = () => {
+  const [customers, setCustomers] = useState([])
+  const [subject, setSubject] = useState('')
+  const [description, setDescription] = useState('')
+  const [customerId, setCustomerId] = useState(0)
+
+  useEffect(() => {
+      const fetchData = async () => {
+          const res = await fetch('https://upp1webapp.azurewebsites.net/api/customers')
+          setCustomers(await res.json())
+      }
+      fetchData()
+  }, [])
+
+  const issues = async (e) => {
+      e.preventDefault()
+      
+      if (customerId !== 0) {
+          const json = JSON.stringify({ subject, description, customerId })
+          const res = await fetch('https://upp1webapp.azurewebsites.net/api/issues', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: json
+          })
+          console.log(await res.json())
+          setSubject('')
+          setDescription('')
+          setCustomerId(0)
+      }
+  }
   return (
     <div className="container my-5">
 
@@ -32,8 +63,8 @@ const TodoList = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row"><a className="text-primary">OR9842</a></th>
-                    <td> Call of Duty IV </td>
+                    <th scope="row"><a className="text-primary">{customerId.FirstName}</a></th>
+                    <td> {description}</td>
                     <td><span className="badge badge-success">Shipped</span></td>
                     <td className="pt-2 pb-0"><canvas id="bar" width="40" height="40"></canvas></td>
                     <td><i className="far fa-edit"></i></td>
@@ -79,8 +110,7 @@ const TodoList = () => {
               </table>
             </div>
             <div className="card-footer white py-3 d-flex justify-content-between">
-              <button className="btn btn-primary btn-md px-3 my-0 mr-0">Place New Order</button> 
-              <button className="btn btn-light btn-md px-3 my-0 ml-0">View All Orders</button>
+              <button className="btn btn-primary btn-md px-3 my-0 mr-0">Place New Todo</button> 
             </div>
           </div>
         </div>
