@@ -1,41 +1,89 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import Comment from '../Comment'
+
+
+
+
+
+
+
+
+
+
 
 const TodoList = () => {
-  const [customers, setCustomers] = useState([])
-  const [subject, setSubject] = useState('')
-  const [description, setDescription] = useState('')
-  const [customerId, setCustomerId] = useState(0)
 
-  useEffect(() => {
-      const fetchData = async () => {
-          const res = await fetch('https://upp1webapp.azurewebsites.net/api/customers')
-          setCustomers(await res.json())
-      }
-      fetchData()
-  }, [])
+const {id} =  useParams ()
 
-  const issues = async (e) => {
-      e.preventDefault()
-      
-      if (customerId !== 0) {
-          const json = JSON.stringify({ subject, description, customerId })
-          const res = await fetch('https://upp1webapp.azurewebsites.net/api/issues', {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: json
-          })
-          console.log(await res.json())
-          setSubject('')
-          setDescription('')
-          setCustomerId(0)
+const [issue, setIssue] = useState('')
+const [comment, setComment] = useState('')
+const [status, setStatus] = useState('')
+const [error, setError] = useState(false)
+const [showForm, setShowForm] = useState(false)
+
+
+  
+const getIssue = useCallback(async () => {
+  const res = await axios.get(`https://upp1webapp.azurewebsites.net/api/issues/${id}`)
+  setIssue(res.data)
+  setStatus(res.data.status.id)
+}, [id])
+
+useEffect(() => {
+  getIssue()
+}, [getIssue, comment, status])
+
+const handleSubmit = async e => {
+    e.preventDefault()
+
+    if(comment.trim() === ''){
+      setError(true)
+    }
+    else
+    {
+      const issueId = id
+      const customerId = issue.customer.id
+      const json = JSON.stringify({comment, issueId, customerId})
+
+      const res = await fetch('https://upp1webapp.azurewebsites.net/api/Comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: json
+      })
+
+      if(res.status === 200) {
+        setComment('')
+        setError(false)
+        setShowForm(false)
       }
+
+    }    
+}
+
+const updateIssue = async statusId => {
+
+  const json = JSON.stringify({ id, statusId })
+  const res = await fetch(`https://upp1webapp.azurewebsites.net/api/issues/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: json
+  })
+  if(res.status === 200) {
+    setStatus(statusId)
   }
+}
+
   return (
     <div className="container my-5">
 
-  
+          { issue &&  
+
     <section>
       
       <div className="row">
@@ -53,7 +101,7 @@ const TodoList = () => {
                 <thead>
                   <tr>
                     <th scope="col">User Name</th>
-                    <th scope="col">Item</th>
+                    <th scope="col">Subject</th>
                     <th scope="col">Status</th>
                     <th scope="col">Discreption</th>
                     <th scope="col">Edit</th>
@@ -63,49 +111,39 @@ const TodoList = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row"><a className="text-primary">{customerId.FirstName}</a></th>
-                    <td> {description}</td>
-                    <td><span className="badge badge-success">Shipped</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar" width="40" height="40"></canvas></td>
-                    <td><i className="far fa-edit"></i></td>
-                    <td><span className="badge badge-danger ml-3"><i className="far fa-clock pr-1"></i>2 mins</span></td>
+                    <th scope="row"><p className="text-primary">{issue.customer.firstName} {issue.customer.lastName}</p></th>
+                    <td> {issue.subject}</td>
+
+                    <option>
+
+                   { status ===1 && <td><span className="badge badge-success" onClick={() => updateIssue(1)}>Todo cretead </span></td>}
+                   { status ===2 && <td><span className="badge badge-success" onClick={() => updateIssue(2)}>Todo started </span></td>}
+                   { status ===3 && <td><span className="badge badge-success" onClick={() => updateIssue(3)}>Todo done </span></td>}
+                    </option>
+                    
+                    <td className="pt-2 pb-0"><canvas id="bar" width="40" height="40">{issue.discreption}</canvas></td>
+
+                    <td>
+                        {
+                              issue.comments.map(comment => ( <Comment key={comment.id} comment={comment}/> ))
+                            }
+                          {  !showForm && status !== 3 &&
+                             <button className='btn btn-new' onClick={() => setShowForm(true)}><i className="far fa-edit"></i></button>
+                          } 
+
+                      
+                      </td>
+                          { showForm && 
+                                  <form onSubmit={handleSubmit}>
+                                    <textarea rows="10" className='comment-input' value={comment} onChange={(e => setComment(e.target.value))}></textarea>
+                                    <button className='btn btn-new'>SPARA</button>
+                                    { error && <p className='error'>Du måste ange en kommentar</p>}
+                                  </form>
+                                }
+
+                    <td><span className="badge badge-danger ml-3"><i className="far fa-clock pr-1"></i>{issue.created}</span></td>
                   </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR1848</a></th>
-                    <td>Samsung Smart TV</td>
-                    <td><span className="badge badge-warning">Pending</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar1" width="40" height="40"></canvas></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR7429</a></th>
-                    <td>iPhone 6 Plus</td>
-                    <td><span className="badge badge-danger">Delivered</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar2" width="40" height="40"></canvas></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR7429</a></th>
-                    <td>Samsung Smart TV</td>
-                    <td><span className="badge badge-info">Processing</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar3" width="40" height="40"></canvas></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR1848</a></th>
-                    <td>Samsung Smart TV</td>
-                    <td><span className="badge badge-warning">Pending</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar4" width="40" height="40"></canvas></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR7429</a></th>
-                    <td>iPhone 6 Plus</td>
-                    <td><span className="badge badge-danger">Delivered</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar5" width="40" height="40"></canvas></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><a className="text-primary">OR9842</a></th>
-                    <td>Call of Duty IV</td>
-                    <td><span className="badge badge-success">Shipped</span></td>
-                    <td className="pt-2 pb-0"><canvas id="bar6" width="40" height="40"></canvas></td>
-                  </tr>
+                  
                 </tbody>
               </table>
             </div>
@@ -117,7 +155,7 @@ const TodoList = () => {
       </div>
   
     </section>
-  
+  }
     
   </div>
   )

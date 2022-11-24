@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState,useCallback } from 'react'
+import axios from 'axios'
 
 const NewTodo = () => {
   const [customers, setCustomers] = useState([])
   const [subject, setSubject] = useState('')
   const [description, setDescription] = useState('')
   const [customerId, setCustomerId] = useState(0)
-  const [comment, setComment] = useState('')
-  const [status, setStatus] = useState('')
-  const handleChange = (e) => {
-    setStatus(e.target.value)
-}
+  
 
+   const getCustomers = useCallback( async () => {
+       const res = await axios.get('https://upp1webapp.azurewebsites.net/api/customers')
+       setCustomers(res.data)
+     }, [])
+   
+  useEffect (() => {
+    getCustomers()
+  }, [getCustomers, customers ])
 
-  useEffect(() => {
-      const fetchData = async () => {
-          const res = await fetch('https://upp1webapp.azurewebsites.net/api/customers')
-          setCustomers(await res.json())
-      }
-      fetchData()
-  }, [])
 
   const handleSubmit = async (e) => {
       e.preventDefault()
@@ -33,10 +30,12 @@ const NewTodo = () => {
               },
               body: json
           })
-          console.log(await res.json())
-          setSubject('')
-          setDescription('')
-          setCustomerId(0)
+          if (res.status === 200){
+
+              setSubject('')
+              setDescription('')
+              setCustomerId(0)
+          }
       }
   }
 
@@ -57,14 +56,7 @@ const NewTodo = () => {
               <label className="form-label">Ange Beskrivning</label>
               <textarea type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
           </div>
-          <div className="mb-3">
-                <label className="form-label">Ange Kommentar</label>
-                <textarea type="text" className="form-control" value={comment} onChange={(e) => setComment(e.target.value)} ></textarea>
-            </div>
-            <div className="mb-3">
-                <label className="form-label">Ange status</label>
-                <input type="text" className="form-control" value={status} onChange={handleChange} />
-            </div>
+          
           <button type="submit" className="btn btn-success">Spara</button>
       </form>
   )

@@ -18,11 +18,13 @@ const Customer = () => {
           },
           body: json
       })
-      console.log(await res.json())
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setPhoneNumber('')
+      if (res.status === 200) {
+
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setPhoneNumber('')
+      }
       
   }
 
