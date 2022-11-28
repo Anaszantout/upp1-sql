@@ -8,15 +8,13 @@ const NewTodo = () => {
   const [customerId, setCustomerId] = useState(0)
   
 
-   const getCustomers = useCallback( async () => {
-       const res = await axios.get('https://upp1webapp.azurewebsites.net/api/customers')
-       setCustomers(res.data)
-     }, [])
-   
-  useEffect (() => {
-    getCustomers()
-  }, [getCustomers, customers ])
-
+  useEffect(() => {
+    const fetchData = async () => {
+        const res = await fetch('https://upp1webapp.azurewebsites.net/api/customers')
+        setCustomers(await res.json())
+    }
+    fetchData()
+}, [])
 
   const handleSubmit = async (e) => {
       e.preventDefault()
@@ -30,7 +28,7 @@ const NewTodo = () => {
               },
               body: json
           })
-          if (res.status === 200){
+          if(res.status === 200) {
 
               setSubject('')
               setDescription('')

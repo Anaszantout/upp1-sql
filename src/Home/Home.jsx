@@ -1,11 +1,11 @@
 import React from 'react'
-import TodoList from '../components/TodoLista/TodoList'
+import Todo from '../components/Todo'
 
 const Home = () => {
   return (
     <div className='Home'>
-        <TodoList/>
-        
+        <Todo/>
+       
     </div>
   )
 }
