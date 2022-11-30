@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useParams, link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Comment from '../Comment'
 import Modal from '../ModalDelete'
-import NewTodo from '../../NewTodo/NewTodo'
 
 
 
@@ -115,49 +114,74 @@ const updateIssue = async statusId => {
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row"><p className="text-primary">{issue.customer.firstName} {issue.customer.lastName}</p></th>
-                    <td> {issue.subject}</td>
-                    <td>
-
-                     { status === 1 && <small className='date-text'>Todo cretead {issue.created.slice(0, 10)} kl {issue.created.slice(11, 16)}</small>}
-                     { status === 2 && <small className='date-text'>Todo started  {issue.modifie.slice(0, 10)} kl {issue.modifie.slice(11, 16)}</small>}
-                     { status === 3 && <small className='error'>Todo done {issue.modifie.slice(0, 10)} kl {issue.modifie.slice(11, 16)}</small>}
-
-
-                   { status ===1 && <button className="badge badge-success" onClick={() => updateIssue(2)}>Todo started  </button>}
-                   { status ===2 && <button className="badge badge-success" onClick={() => setShowModal(true)}>Todo done </button>}
-                   { status ===3 && <span className="badge badge-success" >Todo disapear </span>}
                     
+
+                    
+                    <td>
+                      <div className='d-flex align-items-center'>
+                        <div className='ms-3'>
+                      <p className="fw-bold mb1">{issue.customer.firstName} {issue.customer.lastName}</p>
+                      <p className='text-muted mb-0'>{issue.customer.email}</p>
+                      <p className='text-muted mb-0'>{issue.customer.phoneNumber}</p>
+                        </div>
+
+                      </div>
+                      </td>
+
+
+                    <td> {issue.subject}</td>
+
+
+                    <td>
+                      <div className='d-flex aligen-items-center'>
+                        <div className='ms-3'>
+
+                       <div>
+                     { status === 1 && <small className='date-text'>Todo cretead {issue.created.slice(0, 10)} kl {issue.created.slice(11, 16)}</small>}
+                     { status === 2 && <small className='date-text'>Todo started  {issue.update.slice(0, 10)} kl {issue.update.slice(11, 16)}</small>}
+                     { status === 3 && <small className='error'>Todo done {issue.update.slice(0, 10)} kl {issue.update.slice(11, 16)}</small>}
+                       </div>
+
+                    <div>
+                   { status ===1 && <button className="badge badge-success" onClick={() => updateIssue(2)}>Todo started  </button>}
+                   { status ===2 && <button className="badge badge-primary" onClick={() => setShowModal(true)}>Todo done </button>}
+                   { status ===3 && <span className="badge badge-warning" >Todo disapear </span>}
+                    </div>
+
+                        </div>
+                      </div>
                     
                     </td>
-                    <span className="pt-2 pb-0">{issue.description}</span>
+
+
+                    <td className="pt-2 pb-0">{issue.description}</td>
+
+
 
                     <td>
                         {
                               issue.comments.map(comment => ( <Comment key={comment.id} comment={comment}/> ))
                             }
                           {  !showForm && status !== 3 &&
-                             <button className='btn btn-new' onClick={() => setShowForm(true)}><i className="far fa-edit"></i></button>
+                             <button type='button' className='btn btn-link btn-sm btn-rounded' onClick={() => setShowForm(true)}>Edite</button>
                           } 
 
                       
-                      </td>
                           { showForm && 
                                   <form onSubmit={handleSubmit}>
-                                    <textarea rows="10" className='comment-input' value={comment} onChange={(e => setComment(e.target.value))}></textarea>
-                                    <button className='btn btn-new'>SPARA</button>
-                                    { error && <p className='error'>Du måste ange en kommentar</p>}
+                                    <textarea rows="5" className='comment-input' value={comment} onChange={(e => setComment(e.target.value))}></textarea>
+                                    <button className='btn btn-new-primary'>Save</button>
+                                    { error && <p className='error-warning'>You must write comment </p>}
                                   </form>
                                 }
+                                </td>
 
                   </tr>
                   
                 </tbody>
               </table>
             </div>
-            <div className="card-footer white py-3 d-flex justify-content-between">
-               <button className="btn btn-primary btn-md px-3 my-0 mr-0">Place New Todo </button> 
-            </div>
+            
           </div>
         </div>
       </div>

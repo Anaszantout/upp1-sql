@@ -15,11 +15,11 @@ const ModalDelete = ({setShowModal, modifieIssue}) => {
     <div className='modal'>
         <p className='close-x' onClick={() => setShowModal(false)}>X</p>
         <div className='delete-popup'>
-            <h2>Är du säker att du vill avsluta ärendet?</h2>
-            <small className='modal-text'>Du kommer inte att kunna lägga till fler kommentarer efter det.</small>
+            <h2>Are you sure you want delet this todo </h2>
+            <small className='modal-text'>you can't write new comment after this </small>
             <div className="button-div">
-                <button className='btn-card btn-end' onClick={handleClick}>Ja, avsluta ärendet</button>
-                <button className='btn-card' onClick={() => setShowModal(false)}>Nej</button>
+                <button className='btn-card btn-end' onClick={handleClick}>Yse</button>
+                <button className='btn-card' onClick={() => setShowModal(false)}>No</button>
             </div>
         </div>
     </div>

@@ -39,23 +39,23 @@ const NewTodo = () => {
 
   return (
       <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-              <label className="form-label">Ange Kund</label>
+          <div className="mb-3  mt-5">
+              <label className="form-label">Choose Customer</label>
               <select className="form-select" onChange={(e) => setCustomerId(e.target.value)}>
-                  <option value={0}>-- Ange en kund --</option>
+                  <option value={0}>-- Choose Customer --</option>
                   {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.firstName} {customer.lastName}</option>)}
               </select>
           </div>
           <div className="mb-3">
-              <label className="form-label">Ange Rubrik</label>
+              <label className="form-label">Write Tilttle</label>
               <input type="text" className="form-control" value={subject} onChange={(e) => setSubject(e.target.value)} />
           </div>
           <div className="mb-3">
-              <label className="form-label">Ange Beskrivning</label>
+              <label className="form-label">Write Description </label>
               <textarea type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
           </div>
           
-          <button type="submit" className="btn btn-success">Spara</button>
+          <button type="submit" className="btn btn-success">Save</button>
       </form>
   )
 }

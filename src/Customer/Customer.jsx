@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { render } from 'react-dom'
+import { Redirect } from 'react-router-dom'
 
 const Customer = () => {
   const [firstName, setFirstName] = useState('')
@@ -24,6 +26,9 @@ const Customer = () => {
         setLastName('')
         setEmail('')
         setPhoneNumber('')
+        
+        
+
       }
       
   }
@@ -32,9 +37,7 @@ const Customer = () => {
 
 
 
-
   return (
-
 <div> 
 <div className="container my-5">
 
@@ -70,7 +73,7 @@ const Customer = () => {
         <label htmlFor="form1">Phone Number</label>
       </div>
       
-      <button className="btn btn-block btn-primary btn-lg" >Log in </button>
+      <button className="btn btn-block btn-primary btn-lg">Log in </button>
 
     </div>
 
