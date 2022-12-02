@@ -143,9 +143,9 @@ const updateIssue = async statusId => {
                        </div>
 
                     <div>
-                   { status ===1 && <button className="badge badge-success" onClick={() => updateIssue(2)}>Todo started  </button>}
-                   { status ===2 && <button className="badge badge-primary" onClick={() => setShowModal(true)}>Todo done </button>}
-                   { status ===3 && <span className="badge badge-warning" >Todo disapear </span>}
+                   { status === 1 && <button className="badge badge-success" onClick={() => updateIssue(2)}>Todo started  </button>}
+                   { status === 2 && <button className="badge badge-primary" onClick={() => setShowModal(true)}>Todo done </button>}
+                   { status === 3 && <span className="badge badge-warning" >Todo disapear </span>}
                     </div>
 
                         </div>
